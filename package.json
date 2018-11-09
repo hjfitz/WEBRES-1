@@ -1,0 +1,26 @@
+{
+  "name": "WEBRES-1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/hjfitz/WEBRES-1",
+  "author": "Harry <hfitz83@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "build:prod": "webpack --mode=production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.5",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.5",
+    "babel-loader": "^8.0.4",
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "express": "^4.16.4",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
+  }
+}
