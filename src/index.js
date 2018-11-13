@@ -1,7 +1,9 @@
-const h = (type, content = '', classList) => {
+import { addImageAlts } from './get-image-alt';
+
+const h = (type, content = '', classList = '') => {
   const elem = document.createElement(type);
   elem.textContent = content;
-  classList ? elem.classList = classList : void 0;
+  elem.classList = classList;
   return elem;
 };
 
@@ -40,9 +42,10 @@ const injectStyle = () => {
   }
   `);
   document.head.appendChild(style);
-}
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   injectStyle();
+  addImageAlts();
   highlightLinks();
 });
