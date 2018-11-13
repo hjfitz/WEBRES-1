@@ -1,3 +1,5 @@
+import face from './face';
+
 const h = (type, content = '', classList) => {
   const elem = document.createElement(type);
   elem.textContent = content;
@@ -38,11 +40,17 @@ const injectStyle = () => {
     color: white;
     margin: 0;
   }
+  video, canvas {
+    margin-left: 230px;
+    margin-top: 120px;
+    position: absolute;
+  }
   `);
   document.head.appendChild(style);
-}
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   injectStyle();
   highlightLinks();
+  face.drawSquare();
 });
