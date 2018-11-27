@@ -21,8 +21,8 @@ EventTarget.prototype.addEventListener = function addEventListener(...args) {
 let round = 0
 const maxRounds = 5
 let roundInterval
-let scrollListener
 let mouseListener
+let scrollListener
 
 function h(type, content = '', classList) {
     const elem = document.createElement(type)
@@ -47,11 +47,13 @@ const throttle = (func, limit) => {
 
 function highlightLinks() {
     [...document.querySelectorAll('.webres-injected-link')].forEach(elem => document.body.removeChild(elem));
-    [...document.getElementsByTagName('a')].forEach((link, idx) => {
+    // [...document.querySelectorAll('a, button')].forEach((link, idx) => {
+    [...document.querySelectorAll('a')].forEach((link, idx) => {
         const elem = h('span', '', 'webres-injected-link')
         elem.appendChild(h('p', idx + 1))
         elem.dataset.linkIndex = (idx + 1)
         elem.dataset.link = link // by assigning <a> to dataset, implicitly pull out href
+        elem.dataset.tagType = link.tagName.toLowerCase()
         const rect = link.getBoundingClientRect()
         const style = getComputedStyle(link)
         const padTop = normaliseProp(style.getPropertyValue('padding-top'))
@@ -65,7 +67,10 @@ function highlightLinks() {
 
 function clickLink(number) {
     const [elem] = document.querySelectorAll(`[data-link-index='${number}']`)
-    if (elem) window.location = elem.dataset.link
+    if (!elem) return
+    // if (elem.dataset.tagType === 'a')
+    window.location = elem.dataset.link
+    // else if (elem.dataset.tagType === 'button')
 }
 
 function phasedHighlight() {
