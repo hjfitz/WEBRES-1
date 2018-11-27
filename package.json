@@ -22,5 +22,8 @@
     "express": "^4.16.4",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "compromise": "^11.12.3"
   }
 }

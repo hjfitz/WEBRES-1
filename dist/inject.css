@@ -1,0 +1,20 @@
+.webres-injected-link {
+	border: solid 1px;
+	background-color: rgba(255, 0, 0, 0.5);
+	color: white;
+	position: absolute;
+	font-family: monospace;
+	height: 25px!important;
+	width: 25px!important;
+	padding: 5px;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 999;
+}
+
+.webres-injected-link > p {
+	color: white;
+	margin: 0;
+}
