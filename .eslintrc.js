@@ -9,7 +9,8 @@ module.exports = {
     "browser": true
   },
   "rules": {
-    "indent": ["error", 4],
-    "semi": ["error", "never"]
+    "indent": ["error", "tab"],
+    "semi": ["error", "never"],
+    "no-tabs": 0
   }
 };

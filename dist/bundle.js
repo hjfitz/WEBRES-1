@@ -22899,11 +22899,11 @@ function () {
     this.eventListeners = [];
   }
   /**
-  * Everytime there's a result from the speech recognition, parse it
-  * Dispatch an event based with that parsed data
-  * Handle any commands, if there exist any
-  * @param {Object} event Event from speech recognition
-  */
+    * Everytime there's a result from the speech recognition, parse it
+    * Dispatch an event based with that parsed data
+    * Handle any commands, if there exist any
+    * @param {Object} event Event from speech recognition
+    */
 
 
   _createClass(SpeechRecog, [{
@@ -22917,11 +22917,18 @@ function () {
 
       var parsed = transcript.map(function (result) {
         return result[0].transcript;
-      }).join('');
+      }).join(''); // writeme:
+      // by returning indexOf + 1 in contains, we get two abilities:
+      // first, if it isn't in the transcript it's 0 which is falsy
+      // the position of the words can be compared (maybe a job for compromise?)
+
       var ret = {
-        transcript: parsed
+        transcript: parsed,
+        contains: function contains(word) {
+          return parsed.indexOf(word) + 1;
+        }
       };
-      this.dispatch('interim', ret); // if it's final, emit a custom event with the parsed transcript
+      if (!results[0].isFinal) this.dispatch('interim', ret); // if it's final, emit a custom event with the parsed transcript
       // accessible from e.transcript
 
       if (results[0].isFinal) {
@@ -22931,10 +22938,10 @@ function () {
       }
     }
     /**
-    * If commands are allowed, go through the list of commands and run the command
-    * If the parameter contains one of the triggers, run the associated function
-    * @param {String} voiceCommand A string to match to a command
-    */
+      * If commands are allowed, go through the list of commands and run the command
+      * If the parameter contains one of the triggers, run the associated function
+      * @param {String} voiceCommand A string to match to a command
+      */
 
   }, {
     key: "handleCommands",
@@ -22946,11 +22953,11 @@ function () {
       });
     }
     /**
-    * Adds a listener with a type and an associated function, to run on that event
-    * See this.dispatch
-    * @param {String} type Type of event to listen for
-    * @param {Function} cb Function to run on the event
-    */
+      * Adds a listener with a type and an associated function, to run on that event
+      * See this.dispatch
+      * @param {String} type Type of event to listen for
+      * @param {Function} cb Function to run on the event
+      */
 
   }, {
     key: "addEventListener",
@@ -22961,11 +22968,11 @@ function () {
       });
     }
     /**
-    * Dispatch an 'event'. Go through the list of event listeners
-    * If the type is the same as the parameter passed, invoke that callback
-    * @param {string} type The type of event
-    * @param {object} data Data to be passed to the callback
-    */
+      * Dispatch an 'event'. Go through the list of event listeners
+      * If the type is the same as the parameter passed, invoke that callback
+      * @param {string} type The type of event
+      * @param {object} data Data to be passed to the callback
+      */
 
   }, {
     key: "dispatch",
@@ -22985,6 +22992,256 @@ function () {
 
 /***/ }),
 
+/***/ "./src/Synthesis.js":
+/*!**************************!*\
+  !*** ./src/Synthesis.js ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TextToSpeech; });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var TextToSpeech =
+/*#__PURE__*/
+function () {
+  function TextToSpeech() {
+    _classCallCheck(this, TextToSpeech);
+
+    this.synth = window.speechSynthesis;
+    this.synth.onvoiceschanged = this.populateVoiceList;
+    this.voiceList = this.synth.getVoices();
+
+    var _this$voiceList = _slicedToArray(this.voiceList, 1);
+
+    this.voice = _this$voiceList[0];
+  }
+  /**
+   * Say a thing
+   * @param {string} text Thing to say
+   */
+
+
+  _createClass(TextToSpeech, [{
+    key: "say",
+    value: function say(text) {
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = this.voice;
+      this.synth.speak(utterance);
+    }
+  }]);
+
+  return TextToSpeech;
+}();
+
+
+
+/***/ }),
+
+/***/ "./src/alt-gen.js":
+/*!************************!*\
+  !*** ./src/alt-gen.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return requestImgData; });
+var base = 'https://uksouth.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Description&language=en';
+var key = 'e37d9dd4b20a46b5957953415cf6397d'; // todo: move this to process.env
+
+function requestImgData(src) {
+  return fetch(base, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Ocp-Apim-Subscription-Key': key
+    },
+    body: JSON.stringify({
+      url: src
+    })
+  }).then(function (r) {
+    return r.json();
+  }).then(function (data) {
+    return data.description.captions[0].text;
+  }).catch(function (err) {
+    console.log('error!', err);
+    return 'unable to decode';
+  });
+}
+
+/***/ }),
+
+/***/ "./src/describe.js":
+/*!*************************!*\
+  !*** ./src/describe.js ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return initialiseDescription; });
+/* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! compromise */ "./node_modules/compromise/builds/compromise.js");
+/* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(compromise__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Recognition__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Recognition */ "./src/Recognition.js");
+/* harmony import */ var _Synthesis__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Synthesis */ "./src/Synthesis.js");
+/* harmony import */ var _alt_gen__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./alt-gen */ "./src/alt-gen.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util */ "./src/util.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+
+
+var speak = new _Synthesis__WEBPACK_IMPORTED_MODULE_2__["default"]();
+
+var generateAltTag = function generateAltTag(img) {
+  return Object(_alt_gen__WEBPACK_IMPORTED_MODULE_3__["default"])(img.src).then(function (caption) {
+    img.alt = caption;
+  });
+};
+
+function describe(_x) {
+  return _describe.apply(this, arguments);
+}
+
+function _describe() {
+  _describe = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(img) {
+    var desc;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (img) {
+              _context.next = 2;
+              break;
+            }
+
+            return _context.abrupt("return");
+
+          case 2:
+            if (!img.alt) {
+              _context.next = 6;
+              break;
+            }
+
+            speak.say(img.alt);
+            _context.next = 10;
+            break;
+
+          case 6:
+            _context.next = 8;
+            return generateAltTag(img);
+
+          case 8:
+            desc = _context.sent;
+            speak.say(desc);
+
+          case 10:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+  return _describe.apply(this, arguments);
+}
+
+function describeImage(num) {
+  var _q = Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])("[data-webreslink='".concat(num, "'")),
+      _q2 = _slicedToArray(_q, 1),
+      img = _q2[0];
+
+  describe(img);
+}
+
+function getClosestImage() {
+  var images = Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])('img');
+  var centerX = window.innerWidth / 2;
+
+  var _images$filter$sort = images.filter(function (image) {
+    var rect = image.getBoundingClientRect();
+    return rect.top >= 0 && rect.left >= 0 && rect.right <= window.innerWidth && rect.bottom <= window.innerHeight;
+  }).sort(function (img1, img2) {
+    var rect1 = img1.getBoundingClientRect();
+    var rect2 = img2.getBoundingClientRect();
+    if (rect1.top > rect2.top) return 1;
+    if (rect1.top < rect2.top) return -1;
+    return 0;
+  }),
+      _images$filter$sort2 = _slicedToArray(_images$filter$sort, 1),
+      inFrame = _images$filter$sort2[0];
+
+  return inFrame;
+}
+
+function describeClosestImage() {
+  var closest = getClosestImage();
+  describe(closest);
+} // todo: stop wasteful api calls
+
+
+function highlightImages() {
+  Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])('.webres-injected-link.blue').forEach(function (elem) {
+    return document.body.removeChild(elem);
+  });
+  Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])('img').forEach(function (img, idx) {
+    var elem = Object(_util__WEBPACK_IMPORTED_MODULE_4__["h"])('span', '', 'webres-injected-link blue');
+    var num = idx + 1;
+    img.dataset.webresLink = num;
+    elem.appendChild(Object(_util__WEBPACK_IMPORTED_MODULE_4__["h"])('p', num));
+    Object(_util__WEBPACK_IMPORTED_MODULE_4__["createFloaterPositioning"])(img, elem, true);
+    document.body.appendChild(elem);
+  });
+  console.log(getClosestImage());
+}
+
+function initialiseDescription() {
+  highlightImages();
+  var speech = new _Recognition__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  speech.addEventListener('interim', function (result) {
+    var doc = compromise__WEBPACK_IMPORTED_MODULE_0___default()(result.transcript);
+
+    if (doc.has('(tell me about|describe|explain|)') && doc.has('(image|picture)')) {
+      if (doc.has('#Value')) describeImage(doc.values().text());else describeClosestImage();
+    }
+
+    console.log(result.transcript); // do some decoding on 'describe this image' or 'describe image X'
+  });
+  return highlightImages;
+}
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -22994,25 +23251,10 @@ function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! compromise */ "./node_modules/compromise/builds/compromise.js");
-/* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(compromise__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Recognition__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Recognition */ "./src/Recognition.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
+/* harmony import */ var _speech__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./speech */ "./src/speech.js");
+/* harmony import */ var _describe__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./describe */ "./src/describe.js");
+/* harmony import */ var _monkeypatch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./monkeypatch */ "./src/monkeypatch.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ "./src/util.js");
 // things overcome:
 // window scroll position
 // adding style to elements in the DOM - have to add to the DOM and then add style
@@ -23021,50 +23263,182 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 // as well as links, need to find elements with event listeners to simulate a click
 
 
+
+
 var listeners = [];
-var original = EventTarget.prototype.addEventListener;
+Object(_monkeypatch__WEBPACK_IMPORTED_MODULE_2__["default"])(listeners);
 
-EventTarget.prototype.addEventListener = function addEventListener() {
-  console.log('invoked');
-
-  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  listeners.push({
-    node: this,
-    type: args[0]
+function main() {
+  var highlightImages = Object(_describe__WEBPACK_IMPORTED_MODULE_1__["default"])();
+  var highlightClickables = Object(_speech__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  [highlightClickables, highlightImages].forEach(function (fn) {
+    window.addEventListener('scroll', Object(_util__WEBPACK_IMPORTED_MODULE_3__["throttle"])(fn, 50));
+    window.addEventListener('mouseup', fn);
   });
-  return original.apply(this, args);
-};
+}
 
-var round = 0;
-var maxRounds = 5;
-var roundInterval;
-var mouseListener;
-var scrollListener;
+setTimeout(main, 1);
+
+/***/ }),
+
+/***/ "./src/monkeypatch.js":
+/*!****************************!*\
+  !*** ./src/monkeypatch.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return patch; });
+function patch(listeners) {
+  var original = EventTarget.prototype.addEventListener;
+
+  EventTarget.prototype.addEventListener = function addEventListener() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    listeners.push({
+      node: this,
+      type: args[0]
+    });
+    return original.apply(this, args);
+  };
+}
+
+/***/ }),
+
+/***/ "./src/speech.js":
+/*!***********************!*\
+  !*** ./src/speech.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return initialiseSpeech; });
+/* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! compromise */ "./node_modules/compromise/builds/compromise.js");
+/* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(compromise__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Recognition__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Recognition */ "./src/Recognition.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+ // take selector(s) and return an Array of nodes with that selector
+
+function highlightClickables() {
+  // remove any highlights so as not to duplicate
+  Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])('.webres-injected-link.red').forEach(function (elem) {
+    return document.body.removeChild(elem);
+  });
+  Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])('a').forEach(function (link, idx) {
+    var elem = Object(_util__WEBPACK_IMPORTED_MODULE_2__["h"])('span', '', 'webres-injected-link red');
+    elem.appendChild(Object(_util__WEBPACK_IMPORTED_MODULE_2__["h"])('p', idx + 1));
+    elem.dataset.linkIndex = idx + 1;
+    elem.dataset.link = link; // by assigning <a> to dataset, implicitly pull out href
+
+    elem.dataset.tagType = link.tagName.toLowerCase();
+    Object(_util__WEBPACK_IMPORTED_MODULE_2__["createFloaterPositioning"])(link, elem);
+    document.body.appendChild(elem);
+  });
+}
+
+function clickLink(number) {
+  var _q = Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])("[data-link-index='".concat(number, "']")),
+      _q2 = _slicedToArray(_q, 1),
+      elem = _q2[0];
+
+  if (!elem) return; // if (elem.dataset.tagType === 'a')
+
+  window.location = elem.dataset.link; // else if (elem.dataset.tagType === 'button')
+}
+
+function checkClick(result) {
+  // todo: make this configurable
+  var verbs = ['click', 'open', 'launch', 'go to', 'goto'];
+  var transcript = result.transcript;
+  verbs.forEach(function (verb) {
+    if (!result.contains(verb)) return;
+    var parsed = compromise__WEBPACK_IMPORTED_MODULE_0___default()(transcript).values().toNumber().out();
+    clickLink(Number(parsed.trim()));
+  });
+}
+
+function checkNav(transcript) {
+  if (transcript.contains('go back') || transcript.contains('go backward')) window.history.go(-1);else if (transcript.contains('go forward')) window.history.go(1);
+}
+
+function initialiseSpeech() {
+  var speech = new _Recognition__WEBPACK_IMPORTED_MODULE_1__["default"]();
+  setTimeout(highlightClickables, 100);
+  speech.addEventListener('interim', function (result) {
+    checkClick(result);
+    checkNav(result);
+  });
+  return highlightClickables;
+}
+
+/***/ }),
+
+/***/ "./src/util.js":
+/*!*********************!*\
+  !*** ./src/util.js ***!
+  \*********************/
+/*! exports provided: h, q, throttle, createFloaterPositioning, debug */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return h; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return q; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "throttle", function() { return throttle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createFloaterPositioning", function() { return createFloaterPositioning; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "debug", function() { return debug; });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+var allowDebug = true; // todo: move this to env
 
 function h(type) {
   var content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  var classList = arguments.length > 2 ? arguments[2] : undefined;
+  var classList = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
   var elem = document.createElement(type);
   elem.textContent = content;
-  classList ? elem.classList = classList : void 0;
+  elem.classList = classList;
   return elem;
-}
+} // take ' 14px' and turn it in to 14
 
 var normaliseProp = function normaliseProp(prop) {
-  return Number(prop.replace('px', ''));
+  return +prop.replace(/[a-z]*/gi, '');
 };
 
-var throttle = function throttle(func, limit) {
+var q = function q() {
+  var _document;
+
+  return _toConsumableArray((_document = document).querySelectorAll.apply(_document, arguments));
+};
+function throttle(func, limit) {
   var inThrottle;
   return function throttledCallback() {
     var context = this;
 
     if (!inThrottle) {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
 
       func.apply(context, args);
@@ -23074,86 +23448,28 @@ var throttle = function throttle(func, limit) {
       }, limit);
     }
   };
-};
-
-function highlightLinks() {
-  _toConsumableArray(document.querySelectorAll('.webres-injected-link')).forEach(function (elem) {
-    return document.body.removeChild(elem);
-  }); // [...document.querySelectorAll('a, button')].forEach((link, idx) => {
-
-
-  _toConsumableArray(document.querySelectorAll('a')).forEach(function (link, idx) {
-    var elem = h('span', '', 'webres-injected-link');
-    elem.appendChild(h('p', idx + 1));
-    elem.dataset.linkIndex = idx + 1;
-    elem.dataset.link = link; // by assigning <a> to dataset, implicitly pull out href
-
-    elem.dataset.tagType = link.tagName.toLowerCase();
-    var rect = link.getBoundingClientRect();
-    var style = getComputedStyle(link);
-    var padTop = normaliseProp(style.getPropertyValue('padding-top'));
-    var padLeft = normaliseProp(style.getPropertyValue('padding-left'));
-    var left = rect.x - 5 - padTop + window.scrollX;
-    var top = rect.y - 10 - padLeft + window.scrollY;
-    document.body.appendChild(elem);
-    elem.setAttribute('style', "left:".concat(left, "px; top:").concat(top, "px; "));
-  });
 }
-
-function clickLink(number) {
-  var _document$querySelect = document.querySelectorAll("[data-link-index='".concat(number, "']")),
-      _document$querySelect2 = _slicedToArray(_document$querySelect, 1),
-      elem = _document$querySelect2[0];
-
-  if (!elem) return; // if (elem.dataset.tagType === 'a')
-
-  window.location = elem.dataset.link; // else if (elem.dataset.tagType === 'button')
+function createFloaterPositioning(orig, float, positionRight) {
+  var rect = orig.getBoundingClientRect();
+  var style = getComputedStyle(orig);
+  var padTop = normaliseProp(style.getPropertyValue('padding-top'));
+  var padLeft = normaliseProp(style.getPropertyValue('padding-left'));
+  var padRight = normaliseProp(style.getPropertyValue('padding-right'));
+  var left = rect.left - 5 - padTop + window.scrollX;
+  var top = rect.top - 10 - padLeft + window.scrollY;
+  var right = rect.right - 5 - padRight + window.scrollX;
+  if (positionRight) return float.setAttribute('style', "left:".concat(right, "px; top:").concat(top, "px; "));
+  return float.setAttribute('style', "left:".concat(left, "px; top:").concat(top, "px; "));
 }
+function debug() {
+  var _console;
 
-function phasedHighlight() {
-  round += 1;
-  if (round === maxRounds) return clearInterval(roundInterval);
-  highlightLinks();
+  for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
+  }
+
+  if (allowDebug) (_console = console).log.apply(_console, ['[webres]'].concat(args));
 }
-
-function contains(word) {
-  return this.transcript.indexOf(word) > -1;
-}
-
-function checkClick(result) {
-  var verbs = ['click', 'open', 'launch', 'go to', 'goto'];
-  var transcript = result.transcript;
-  verbs.forEach(function (verb) {
-    if (result.contains(verb)) {
-      // && result.contains('link')) {
-      // if (transcript.indexOf(`${verb}`) > -1 && transcript.indexOf('link')) {
-      var parsed = compromise__WEBPACK_IMPORTED_MODULE_0___default()(transcript).values().toNumber().out();
-      clickLink(Number(parsed.trim()));
-    }
-  });
-}
-
-function checkNav(transcript) {
-  if (transcript.contains('go back') || transcript.contains('go backward')) return window.history.go(-1);
-  if (transcript.contains('go forward')) return window.history.go(1);
-}
-
-function main() {
-  setTimeout(highlightLinks, 100);
-  scrollListener = window.addEventListener('scroll', highlightLinks); // , 50))
-
-  mouseListener = window.addEventListener('mouseup', throttle(highlightLinks, 50));
-  var speech = new _Recognition__WEBPACK_IMPORTED_MODULE_1__["default"]();
-  speech.addEventListener('interim', function (result) {
-    console.log(result.transcript);
-    result.contains = contains.bind(result); // console.log(transcript)
-
-    checkClick(result);
-    checkNav(result);
-  });
-}
-
-setTimeout(main, 100);
 
 /***/ }),
 

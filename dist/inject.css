@@ -1,6 +1,5 @@
 .webres-injected-link {
 	border: solid 1px;
-	background-color: rgba(255, 0, 0, 0.5);
 	color: white;
 	position: absolute;
 	font-family: monospace;
@@ -12,6 +11,14 @@
 	align-items: center;
 	justify-content: center;
 	z-index: 999;
+}
+
+.webres-injected-link.red {
+	background-color: rgba(255, 0, 0, 0.5);
+}
+
+.webres-injected-link.blue {
+	background-color: rgba(0, 0, 255, 0.5)
 }
 
 .webres-injected-link > p {
