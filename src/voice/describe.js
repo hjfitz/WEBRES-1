@@ -1,30 +1,21 @@
 import nlp from 'compromise'
-// import Recognition from './Recognition'
-// import Synthesis from './Synthesis'
-import getAlt from './alt-gen'
+import getImageDescription from './alt-gen'
+import Synthesis from '../classes/Synthesis'
 
-import { q, h, createFloaterPositioning } from './util'
+import { q, h, createFloaterPositioning } from '../util'
 
-// const speak = new Synthesis()
+const speak = new Synthesis()
 
-const generateAltTag = img => getAlt(img.src).then((caption) => { img.alt = caption })
+const describe = img => getImageDescription(img.src).then(speak.say)
 
-async function describe(img) {
-	console.log('describing', img)
-	const desc = await generateAltTag(img)
-	// speak.say(desc)
-}
 
 function describeImage(num) {
 	const [img] = q(`[data-webreslink='${num}'`)
-	console.log(num)
-	console.log(img)
 	describe(img)
 }
 
 function getClosestImage() {
 	const images = q('img')
-	const centerX = window.innerWidth / 2
 	const [inFrame] = images.filter((image) => {
 		const rect = image.getBoundingClientRect()
 		return (
@@ -43,10 +34,7 @@ function getClosestImage() {
 	return inFrame
 }
 
-function describeClosestImage() {
-	const closest = getClosestImage()
-	describe(closest)
-}
+const describeClosestImage = () => describe(getClosestImage())
 
 // todo: stop wasteful api calls
 function highlightImages() {
@@ -59,26 +47,22 @@ function highlightImages() {
 		createFloaterPositioning(img, elem, true)
 		document.body.appendChild(elem)
 	})
-	console.log(getClosestImage())
 }
 
-export default function initialiseDescription(speech) {
+export default function initialiseVoiceDescription(speech) {
 	highlightImages()
 	speech.addEventListener('interim', (result) => {
 		console.log(result.transcript)
 		const doc = nlp(result.transcript);
-		// if (doc.has('(tell me about|describe|explain|)')) { // && doc.has('(image|picture)')) {
+		// do some decoding on 'describe this image' or 'describe image X'
 		['tell me about', 'describe', 'explain'].forEach((verb) => {
 			if (!result.contains(verb)) return
 			console.log(doc.values().text())
 			if (result.transcript.match(/[0-9]*/g)) {
 				console.log('about to describe')
 				describeImage(doc.values().text())
-			}
-			// else describeClosestImage()
+			} else describeClosestImage()
 		})
-		console.log(result.transcript)
-		// do some decoding on 'describe this image' or 'describe image X'
 	})
 
 	return highlightImages

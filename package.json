@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode=development",
-	"build:prod": "webpack --mode=production",
-	"watch": "yarn build --watch"
+    "build:prod": "webpack --mode=production",
+    "watch": "yarn build --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.1.5",
@@ -24,6 +24,7 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "compromise": "^11.12.3"
+    "compromise": "^11.12.3",
+    "face-api.js": "^0.16.1"
   }
 }

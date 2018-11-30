@@ -1,6 +1,6 @@
 import nlp from 'compromise'
-import Recognition from './Recognition'
-import { h, q, createFloaterPositioning } from './util'
+import Recognition from '../classes/Recognition'
+import { h, q, createFloaterPositioning } from '../util'
 
 
 // take selector(s) and return an Array of nodes with that selector
@@ -44,7 +44,7 @@ function checkNav(transcript) {
 	else if (transcript.contains('go forward')) window.history.go(1)
 }
 
-export default function initialiseSpeech(speech) {
+export default function initialiseVoiceControl(speech) {
 	console.log('speech initialised')
 	setTimeout(highlightClickables, 100)
 

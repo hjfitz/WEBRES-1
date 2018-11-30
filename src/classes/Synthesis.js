@@ -1,9 +1,6 @@
 export default class TextToSpeech {
 	constructor() {
 		this.synth = window.speechSynthesis
-
-		// this.synth.onvoiceschanged = this.populateVoiceList
-
 		this.voiceList = this.synth.getVoices();
 		[this.voice] = this.voiceList
 	}
@@ -15,6 +12,6 @@ export default class TextToSpeech {
 	say(text) {
 		const utterance = new SpeechSynthesisUtterance(text)
 		utterance.voice = this.voice
-		// this.synth.speak(utterance)
+		this.synth.speak(utterance)
 	}
 }

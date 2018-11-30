@@ -25,3 +25,30 @@
 	color: white;
 	margin: 0;
 }
+
+.webres-settings-overlay {
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 200px;
+	width: 350px;
+	background-color: #ff00ff;
+	z-index:999;
+}
+
+.webres-video {
+	z-index: 1000;
+}
+
+.webres-video, .webres-canvas-overlay {
+	height: 150px;
+	width: 200px;
+	position: fixed;
+	top: 0;
+	right: 0;
+
+}
+
+.webres-canvas-overlay {
+	background-color: #ff0;
+}
