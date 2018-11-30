@@ -6,17 +6,16 @@
 // as well as links, need to find elements with event listeners to simulate a click
 import initialiseSpeech from './speech'
 import initialiseImages from './describe'
-import patch from './monkeypatch'
+import Recognition from './Recognition'
 import { throttle } from './util'
 
 const listeners = []
 
-patch(listeners)
-
 
 function main() {
-	const highlightImages = initialiseImages()
-	const highlightClickables = initialiseSpeech();
+	const speech = new Recognition()
+	const highlightImages = initialiseImages(speech)
+	const highlightClickables = initialiseSpeech(speech);
 
 
 	[highlightClickables, highlightImages].forEach((fn) => {

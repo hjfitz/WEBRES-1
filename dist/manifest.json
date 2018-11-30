@@ -2,7 +2,7 @@
 	"name": "Webcam extension test",
 	"version": "1.0",
 	"description": "Attempting to inject a frame with a webcam",
-	"permissions": ["activeTab", "declarativeContent", "storage", "audioCapture"],
+	"permissions": ["activeTab", "storage"],
 	"background": {
 		"scripts": ["bundle.js"],
 		"persistent": false

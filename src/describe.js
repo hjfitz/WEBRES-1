@@ -1,25 +1,24 @@
 import nlp from 'compromise'
-import Recognition from './Recognition'
-import Synthesis from './Synthesis'
+// import Recognition from './Recognition'
+// import Synthesis from './Synthesis'
 import getAlt from './alt-gen'
 
 import { q, h, createFloaterPositioning } from './util'
 
-const speak = new Synthesis()
+// const speak = new Synthesis()
 
 const generateAltTag = img => getAlt(img.src).then((caption) => { img.alt = caption })
 
 async function describe(img) {
-	if (!img) return
-	if (img.alt) speak.say(img.alt)
-	else {
-		const desc = await generateAltTag(img)
-		speak.say(desc)
-	}
+	console.log('describing', img)
+	const desc = await generateAltTag(img)
+	// speak.say(desc)
 }
 
 function describeImage(num) {
 	const [img] = q(`[data-webreslink='${num}'`)
+	console.log(num)
+	console.log(img)
 	describe(img)
 }
 
@@ -63,15 +62,21 @@ function highlightImages() {
 	console.log(getClosestImage())
 }
 
-export default function initialiseDescription() {
+export default function initialiseDescription(speech) {
 	highlightImages()
-	const speech = new Recognition()
 	speech.addEventListener('interim', (result) => {
-		const doc = nlp(result.transcript)
-		if (doc.has('(tell me about|describe|explain|)') && doc.has('(image|picture)')) {
-			if (doc.has('#Value')) describeImage(doc.values().text())
-			else describeClosestImage()
-		}
+		console.log(result.transcript)
+		const doc = nlp(result.transcript);
+		// if (doc.has('(tell me about|describe|explain|)')) { // && doc.has('(image|picture)')) {
+		['tell me about', 'describe', 'explain'].forEach((verb) => {
+			if (!result.contains(verb)) return
+			console.log(doc.values().text())
+			if (result.transcript.match(/[0-9]*/g)) {
+				console.log('about to describe')
+				describeImage(doc.values().text())
+			}
+			// else describeClosestImage()
+		})
 		console.log(result.transcript)
 		// do some decoding on 'describe this image' or 'describe image X'
 	})

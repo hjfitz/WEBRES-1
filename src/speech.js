@@ -44,8 +44,8 @@ function checkNav(transcript) {
 	else if (transcript.contains('go forward')) window.history.go(1)
 }
 
-export default function initialiseSpeech() {
-	const speech = new Recognition()
+export default function initialiseSpeech(speech) {
+	console.log('speech initialised')
 	setTimeout(highlightClickables, 100)
 
 	speech.addEventListener('interim', (result) => {

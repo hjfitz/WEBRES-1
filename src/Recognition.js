@@ -14,6 +14,8 @@ export default class SpeechRecog {
 		// add a handler for results
 		this.recognition.addEventListener('result', this.handleResult)
 		// make sure it's continuous
+		this.recognition.continuous = true
+		// hack to make sure it's continuous in firefox??
 		this.recognition.addEventListener('end', this.recognition.start)
 		this.recognition.start()
 
@@ -41,7 +43,7 @@ export default class SpeechRecog {
 		// first, if it isn't in the transcript it's 0 which is falsy
 		// the position of the words can be compared (maybe a job for compromise?)
 		const ret = { transcript: parsed, contains: word => parsed.indexOf(word) + 1 }
-		if (!results[0].isFinal) this.dispatch('interim', ret)
+		this.dispatch('interim', ret)
 		// if it's final, emit a custom event with the parsed transcript
 		// accessible from e.transcript
 		if (results[0].isFinal) {

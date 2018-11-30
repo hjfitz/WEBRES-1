@@ -22890,6 +22890,8 @@ function () {
 
     this.recognition.addEventListener('result', this.handleResult); // make sure it's continuous
 
+    this.recognition.continuous = true; // hack to make sure it's continuous in firefox??
+
     this.recognition.addEventListener('end', this.recognition.start);
     this.recognition.start(); // setup custom commands
 
@@ -22928,7 +22930,7 @@ function () {
           return parsed.indexOf(word) + 1;
         }
       };
-      if (!results[0].isFinal) this.dispatch('interim', ret); // if it's final, emit a custom event with the parsed transcript
+      this.dispatch('interim', ret); // if it's final, emit a custom event with the parsed transcript
       // accessible from e.transcript
 
       if (results[0].isFinal) {
@@ -22992,66 +22994,6 @@ function () {
 
 /***/ }),
 
-/***/ "./src/Synthesis.js":
-/*!**************************!*\
-  !*** ./src/Synthesis.js ***!
-  \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TextToSpeech; });
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var TextToSpeech =
-/*#__PURE__*/
-function () {
-  function TextToSpeech() {
-    _classCallCheck(this, TextToSpeech);
-
-    this.synth = window.speechSynthesis;
-    this.synth.onvoiceschanged = this.populateVoiceList;
-    this.voiceList = this.synth.getVoices();
-
-    var _this$voiceList = _slicedToArray(this.voiceList, 1);
-
-    this.voice = _this$voiceList[0];
-  }
-  /**
-   * Say a thing
-   * @param {string} text Thing to say
-   */
-
-
-  _createClass(TextToSpeech, [{
-    key: "say",
-    value: function say(text) {
-      var utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = this.voice;
-      this.synth.speak(utterance);
-    }
-  }]);
-
-  return TextToSpeech;
-}();
-
-
-
-/***/ }),
-
 /***/ "./src/alt-gen.js":
 /*!************************!*\
   !*** ./src/alt-gen.js ***!
@@ -23099,10 +23041,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return initialiseDescription; });
 /* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! compromise */ "./node_modules/compromise/builds/compromise.js");
 /* harmony import */ var compromise__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(compromise__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Recognition__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Recognition */ "./src/Recognition.js");
-/* harmony import */ var _Synthesis__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Synthesis */ "./src/Synthesis.js");
-/* harmony import */ var _alt_gen__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./alt-gen */ "./src/alt-gen.js");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util */ "./src/util.js");
+/* harmony import */ var _alt_gen__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./alt-gen */ "./src/alt-gen.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -23115,15 +23055,14 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+ // import Recognition from './Recognition'
+// import Synthesis from './Synthesis'
 
 
-
-
-
-var speak = new _Synthesis__WEBPACK_IMPORTED_MODULE_2__["default"]();
+ // const speak = new Synthesis()
 
 var generateAltTag = function generateAltTag(img) {
-  return Object(_alt_gen__WEBPACK_IMPORTED_MODULE_3__["default"])(img.src).then(function (caption) {
+  return Object(_alt_gen__WEBPACK_IMPORTED_MODULE_1__["default"])(img.src).then(function (caption) {
     img.alt = caption;
   });
 };
@@ -23141,32 +23080,14 @@ function _describe() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            if (img) {
-              _context.next = 2;
-              break;
-            }
-
-            return _context.abrupt("return");
-
-          case 2:
-            if (!img.alt) {
-              _context.next = 6;
-              break;
-            }
-
-            speak.say(img.alt);
-            _context.next = 10;
-            break;
-
-          case 6:
-            _context.next = 8;
+            console.log('describing', img);
+            _context.next = 3;
             return generateAltTag(img);
 
-          case 8:
+          case 3:
             desc = _context.sent;
-            speak.say(desc);
 
-          case 10:
+          case 4:
           case "end":
             return _context.stop();
         }
@@ -23177,15 +23098,17 @@ function _describe() {
 }
 
 function describeImage(num) {
-  var _q = Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])("[data-webreslink='".concat(num, "'")),
+  var _q = Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])("[data-webreslink='".concat(num, "'")),
       _q2 = _slicedToArray(_q, 1),
       img = _q2[0];
 
+  console.log(num);
+  console.log(img);
   describe(img);
 }
 
 function getClosestImage() {
-  var images = Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])('img');
+  var images = Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])('img');
   var centerX = window.innerWidth / 2;
 
   var _images$filter$sort = images.filter(function (image) {
@@ -23211,30 +23134,36 @@ function describeClosestImage() {
 
 
 function highlightImages() {
-  Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])('.webres-injected-link.blue').forEach(function (elem) {
+  Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])('.webres-injected-link.blue').forEach(function (elem) {
     return document.body.removeChild(elem);
   });
-  Object(_util__WEBPACK_IMPORTED_MODULE_4__["q"])('img').forEach(function (img, idx) {
-    var elem = Object(_util__WEBPACK_IMPORTED_MODULE_4__["h"])('span', '', 'webres-injected-link blue');
+  Object(_util__WEBPACK_IMPORTED_MODULE_2__["q"])('img').forEach(function (img, idx) {
+    var elem = Object(_util__WEBPACK_IMPORTED_MODULE_2__["h"])('span', '', 'webres-injected-link blue');
     var num = idx + 1;
     img.dataset.webresLink = num;
-    elem.appendChild(Object(_util__WEBPACK_IMPORTED_MODULE_4__["h"])('p', num));
-    Object(_util__WEBPACK_IMPORTED_MODULE_4__["createFloaterPositioning"])(img, elem, true);
+    elem.appendChild(Object(_util__WEBPACK_IMPORTED_MODULE_2__["h"])('p', num));
+    Object(_util__WEBPACK_IMPORTED_MODULE_2__["createFloaterPositioning"])(img, elem, true);
     document.body.appendChild(elem);
   });
   console.log(getClosestImage());
 }
 
-function initialiseDescription() {
+function initialiseDescription(speech) {
   highlightImages();
-  var speech = new _Recognition__WEBPACK_IMPORTED_MODULE_1__["default"]();
   speech.addEventListener('interim', function (result) {
-    var doc = compromise__WEBPACK_IMPORTED_MODULE_0___default()(result.transcript);
+    console.log(result.transcript);
+    var doc = compromise__WEBPACK_IMPORTED_MODULE_0___default()(result.transcript); // if (doc.has('(tell me about|describe|explain|)')) { // && doc.has('(image|picture)')) {
 
-    if (doc.has('(tell me about|describe|explain|)') && doc.has('(image|picture)')) {
-      if (doc.has('#Value')) describeImage(doc.values().text());else describeClosestImage();
-    }
+    ['tell me about', 'describe', 'explain'].forEach(function (verb) {
+      if (!result.contains(verb)) return;
+      console.log(doc.values().text());
 
+      if (result.transcript.match(/[0-9]*/g)) {
+        console.log('about to describe');
+        describeImage(doc.values().text());
+      } // else describeClosestImage()
+
+    });
     console.log(result.transcript); // do some decoding on 'describe this image' or 'describe image X'
   });
   return highlightImages;
@@ -23253,7 +23182,7 @@ function initialiseDescription() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _speech__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./speech */ "./src/speech.js");
 /* harmony import */ var _describe__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./describe */ "./src/describe.js");
-/* harmony import */ var _monkeypatch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./monkeypatch */ "./src/monkeypatch.js");
+/* harmony import */ var _Recognition__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Recognition */ "./src/Recognition.js");
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ "./src/util.js");
 // things overcome:
 // window scroll position
@@ -23266,11 +23195,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var listeners = [];
-Object(_monkeypatch__WEBPACK_IMPORTED_MODULE_2__["default"])(listeners);
 
 function main() {
-  var highlightImages = Object(_describe__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  var highlightClickables = Object(_speech__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  var speech = new _Recognition__WEBPACK_IMPORTED_MODULE_2__["default"]();
+  var highlightImages = Object(_describe__WEBPACK_IMPORTED_MODULE_1__["default"])(speech);
+  var highlightClickables = Object(_speech__WEBPACK_IMPORTED_MODULE_0__["default"])(speech);
   [highlightClickables, highlightImages].forEach(function (fn) {
     window.addEventListener('scroll', Object(_util__WEBPACK_IMPORTED_MODULE_3__["throttle"])(fn, 50));
     window.addEventListener('mouseup', fn);
@@ -23278,34 +23207,6 @@ function main() {
 }
 
 setTimeout(main, 1);
-
-/***/ }),
-
-/***/ "./src/monkeypatch.js":
-/*!****************************!*\
-  !*** ./src/monkeypatch.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return patch; });
-function patch(listeners) {
-  var original = EventTarget.prototype.addEventListener;
-
-  EventTarget.prototype.addEventListener = function addEventListener() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    listeners.push({
-      node: this,
-      type: args[0]
-    });
-    return original.apply(this, args);
-  };
-}
 
 /***/ }),
 
@@ -23377,8 +23278,8 @@ function checkNav(transcript) {
   if (transcript.contains('go back') || transcript.contains('go backward')) window.history.go(-1);else if (transcript.contains('go forward')) window.history.go(1);
 }
 
-function initialiseSpeech() {
-  var speech = new _Recognition__WEBPACK_IMPORTED_MODULE_1__["default"]();
+function initialiseSpeech(speech) {
+  console.log('speech initialised');
   setTimeout(highlightClickables, 100);
   speech.addEventListener('interim', function (result) {
     checkClick(result);
