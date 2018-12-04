@@ -10,8 +10,9 @@ const describe = img => getImageDescription(img.src).then(speak.say)
 
 
 function describeImage(num) {
-	const [img] = q(`[data-webreslink='${num}'`)
-	describe(img)
+	const [img] = q(`[data-webres-link='${num}'`)
+	console.log(num)
+	if (img) describe(img)
 }
 
 function getClosestImage() {
@@ -51,7 +52,7 @@ function highlightImages() {
 
 export default function initialiseVoiceDescription(speech) {
 	highlightImages()
-	speech.addEventListener('interim', (result) => {
+	speech.addEventListener('result', (result) => {
 		console.log(result.transcript)
 		const doc = nlp(result.transcript);
 		// do some decoding on 'describe this image' or 'describe image X'
@@ -60,7 +61,7 @@ export default function initialiseVoiceDescription(speech) {
 			console.log(doc.values().text())
 			if (result.transcript.match(/[0-9]*/g)) {
 				console.log('about to describe')
-				describeImage(doc.values().text())
+				describeImage(Number(doc.values(0).toNumber().out()))
 			} else describeClosestImage()
 		})
 	})

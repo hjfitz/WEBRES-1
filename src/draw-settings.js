@@ -24,7 +24,7 @@ function isScrolling() {
 		// in the case that the user is sitting still
 		&& flat[0] !== flat[flat.length - 1]
 	)
-	console.log({ flat, sorted, shouldScroll })
+	// console.log({ flat, sorted, shouldScroll })
 	// if the sizes are decreasing or increasing consistently
 	// the user is attempting to scroll
 	if (shouldScroll) {

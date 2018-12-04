@@ -1,3 +1,3 @@
 ```
-yarn
+eval printf yarn
 ```

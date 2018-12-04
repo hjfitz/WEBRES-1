@@ -25451,14 +25451,6 @@ function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TextToSpeech; });
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -25472,11 +25464,6 @@ function () {
     _classCallCheck(this, TextToSpeech);
 
     this.synth = window.speechSynthesis;
-    this.voiceList = this.synth.getVoices();
-
-    var _this$voiceList = _slicedToArray(this.voiceList, 1);
-
-    this.voice = _this$voiceList[0];
   }
   /**
    * Say a thing
@@ -25488,8 +25475,8 @@ function () {
     key: "say",
     value: function say(text) {
       var utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = this.voice;
-      this.synth.speak(utterance);
+      console.log('saying', text);
+      window.speechSynthesis.speak(utterance);
     }
   }]);
 
@@ -25535,12 +25522,8 @@ function isScrolling() {
   var shouldScroll = // make sure that the head is ascending or descending
   JSON.stringify(flat) === JSON.stringify(sorted) // ensure that the first and last elements aren't the same
   // in the case that the user is sitting still
-  && flat[0] !== flat[flat.length - 1];
-  console.log({
-    flat: flat,
-    sorted: sorted,
-    shouldScroll: shouldScroll
-  }); // if the sizes are decreasing or increasing consistently
+  && flat[0] !== flat[flat.length - 1]; // console.log({ flat, sorted, shouldScroll })
+  // if the sizes are decreasing or increasing consistently
   // the user is attempting to scroll
 
   if (shouldScroll) {// check direction and scroll
@@ -25910,11 +25893,12 @@ var describe = function describe(img) {
 };
 
 function describeImage(num) {
-  var _q = Object(_util__WEBPACK_IMPORTED_MODULE_3__["q"])("[data-webreslink='".concat(num, "'")),
+  var _q = Object(_util__WEBPACK_IMPORTED_MODULE_3__["q"])("[data-webres-link='".concat(num, "'")),
       _q2 = _slicedToArray(_q, 1),
       img = _q2[0];
 
-  describe(img);
+  console.log(num);
+  if (img) describe(img);
 }
 
 function getClosestImage() {
@@ -25957,7 +25941,7 @@ function highlightImages() {
 
 function initialiseVoiceDescription(speech) {
   highlightImages();
-  speech.addEventListener('interim', function (result) {
+  speech.addEventListener('result', function (result) {
     console.log(result.transcript);
     var doc = compromise__WEBPACK_IMPORTED_MODULE_0___default()(result.transcript); // do some decoding on 'describe this image' or 'describe image X'
 
@@ -25967,7 +25951,7 @@ function initialiseVoiceDescription(speech) {
 
       if (result.transcript.match(/[0-9]*/g)) {
         console.log('about to describe');
-        describeImage(doc.values().text());
+        describeImage(Number(doc.values(0).toNumber().out()));
       } else describeClosestImage();
     });
   });
