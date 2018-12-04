@@ -29,6 +29,7 @@ export default class SpeechRecog {
    * @param {Object} event Event from speech recognition
    */
 	handleResult({ results }) {
+		console.log(arguments)
 		// cast results to array
 		const transcript = [...results]
 		// make the transcript readable
@@ -42,7 +43,10 @@ export default class SpeechRecog {
 		console.log('interim:', parsed)
 		// if it's final, emit a custom event with the parsed transcript
 		// accessible from e.transcript
-		if (results[0].isFinal) this.dispatch('end', ret)
+		if (results[0].isFinal) {
+			console.log('dispatching end result', ret)
+			this.dispatch('end', ret)
+		}
 	}
 
 
@@ -53,7 +57,12 @@ export default class SpeechRecog {
    * @param {Function} cb Function to run on the event
    */
 	addEventListener(type, cb) {
-		this.eventListeners.push({ type, cb })
+		const events = ['interim', 'end']
+		if (events.includes(type)) {
+			this.eventListeners.push({ type, cb })
+		} else {
+			console.warn(`error, event listener should be one of ${events.join(', ')}`)
+		}
 	}
 
 	/**

@@ -52,7 +52,7 @@ function highlightImages() {
 
 export default function initialiseVoiceDescription(speech) {
 	highlightImages()
-	speech.addEventListener('result', (result) => {
+	speech.addEventListener('end', (result) => {
 		console.log(result.transcript)
 		const doc = nlp(result.transcript);
 		// do some decoding on 'describe this image' or 'describe image X'

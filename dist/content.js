@@ -25379,8 +25379,8 @@ function () {
     key: "handleResult",
     value: function handleResult(_ref) {
       var results = _ref.results;
+      console.log(arguments); // cast results to array
 
-      // cast results to array
       var transcript = _toConsumableArray(results); // make the transcript readable
 
 
@@ -25401,7 +25401,10 @@ function () {
       console.log('interim:', parsed); // if it's final, emit a custom event with the parsed transcript
       // accessible from e.transcript
 
-      if (results[0].isFinal) this.dispatch('end', ret);
+      if (results[0].isFinal) {
+        console.log('dispatching end result', ret);
+        this.dispatch('end', ret);
+      }
     }
     /**
       * Adds a listener with a type and an associated function, to run on that event
@@ -25413,10 +25416,16 @@ function () {
   }, {
     key: "addEventListener",
     value: function addEventListener(type, cb) {
-      this.eventListeners.push({
-        type: type,
-        cb: cb
-      });
+      var events = ['interim', 'end'];
+
+      if (events.includes(type)) {
+        this.eventListeners.push({
+          type: type,
+          cb: cb
+        });
+      } else {
+        console.warn("error, event listener should be one of ".concat(events.join(', ')));
+      }
     }
     /**
       * Dispatch an 'event'. Go through the list of event listeners
@@ -25941,7 +25950,7 @@ function highlightImages() {
 
 function initialiseVoiceDescription(speech) {
   highlightImages();
-  speech.addEventListener('result', function (result) {
+  speech.addEventListener('end', function (result) {
     console.log(result.transcript);
     var doc = compromise__WEBPACK_IMPORTED_MODULE_0___default()(result.transcript); // do some decoding on 'describe this image' or 'describe image X'
 
