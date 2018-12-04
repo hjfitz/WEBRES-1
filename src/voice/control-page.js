@@ -1,5 +1,4 @@
 import nlp from 'compromise'
-import Recognition from '../classes/Recognition'
 import { h, q, createFloaterPositioning } from '../util'
 
 

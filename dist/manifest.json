@@ -4,19 +4,19 @@
 	"description": "Attempting to inject a frame with a webcam",
 	"permissions": ["activeTab", "storage"],
 	"background": {
-		"scripts": ["bundle.js"],
-		"persistent": false
+		"persistent": true,
+		"page": "bg.html"
 	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
 			"run_at": "document_start",
-			"js": ["bundle.js"],
+			"js": ["content.js"],
 			"css": ["inject.css"]
 		}
 	],
 	"page_action": {
-		"default_popup": "popup.html"
+		"default_popup": "bg.html"
 	},
 	"manifest_version": 2
 }
