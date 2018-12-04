@@ -4,11 +4,11 @@
 // Add all methods in IIFE so as to not mess with window
 // body not rendering everything and thus having to do different rounds - having to wait for render
 // as well as links, need to find elements with event listeners to simulate a click
-// developing with speech is difficult - google must throttle this as it doesn't always print to console
+// developing with speech is difficult
+//   - google must throttle this as it doesn't always print to console
 import initialiseVoiceDescription from './voice/describe'
 import initialiseVoiceControl from './voice/control-page'
 import Recognition from './classes/Recognition'
-import { throttle } from './util'
 import draw from './draw-settings'
 
 

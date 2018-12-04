@@ -36,19 +36,12 @@
 	z-index:999;
 }
 
-.webres-video {
-	z-index: 1000;
-}
 
-.webres-video, .webres-canvas-overlay {
-	height: 150px;
-	width: 200px;
-	position: fixed;
+#webres-video, #webres-canvas {
+	z-index: 1000;
+	position: absolute;
 	top: 0;
 	right: 0;
 
 }
 
-.webres-canvas-overlay {
-	background-color: #ff0;
-}

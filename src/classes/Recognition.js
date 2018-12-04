@@ -44,6 +44,7 @@ export default class SpeechRecog {
 		// the position of the words can be compared (maybe a job for compromise?)
 		const ret = { transcript: parsed, contains: word => parsed.indexOf(word) + 1 }
 		this.dispatch('interim', ret)
+		console.log('interim:', parsed)
 		// if it's final, emit a custom event with the parsed transcript
 		// accessible from e.transcript
 		if (results[0].isFinal) {
