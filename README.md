@@ -1,7 +1,7 @@
 # [Name placeholder]
 Control Google Chrome using voice commands and head movements. 
 
-## Installation
+## Installation
 
 Clone the GitHub repository
 ```
